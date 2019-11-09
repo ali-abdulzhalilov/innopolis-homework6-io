@@ -9,9 +9,9 @@ import java.util.ArrayList;
 
 public class Server {
     private ServerSocket serverSocket;
-    public boolean isEnabled = true;
+    protected boolean isEnabled = true;
 
-    public Server() throws IOException {
+    Server() throws IOException {
         serverSocket = new ServerSocket();
     }
 
@@ -20,7 +20,7 @@ public class Server {
         serverSocket.bind(address);
     }
 
-    public void bind(InetSocketAddress address) throws IOException {
+    void bind(InetSocketAddress address) throws IOException {
         if (serverSocket != null) {
             serverSocket.close();
             serverSocket = new ServerSocket();
@@ -29,34 +29,33 @@ public class Server {
         serverSocket.bind(address);
     }
 
-    public Socket accept() throws IOException {
+    Socket accept() throws IOException {
         return serverSocket.accept();
     }
 
-    public void send(Socket client, String str) throws IOException {
+    void send(Socket client, String str) throws IOException {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-        out.write(str);
+        out.write(str+'\0');
         out.flush();
     }
 
-    public ArrayList<String> read(Socket client) throws IOException {
+    String read(Socket client) throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        ArrayList<String> input = new ArrayList<>();
+        StringBuilder s = new StringBuilder();
 
-        String line = in.readLine();
-        while (!line.isEmpty()) {
-            input.add(line);
-            line = in.readLine();
+        int ch = 'x';
+        while((ch = in.read()) != '\0' && ch != -1) {
+            s.append((char)ch);
         }
 
-        return input;
+        return s.toString();
     }
 
-    public void shutdown() {
+    void shutdown() {
         this.isEnabled = false;
     }
 
-    public void close() throws IOException {
+    void close() throws IOException {
         serverSocket.close();
     }
 }

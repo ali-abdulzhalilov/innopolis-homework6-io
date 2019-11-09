@@ -3,15 +3,13 @@ package stc;
 import java.io.*;
 import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.security.Signature;
-import java.util.ArrayList;
 
 public class Client {
     private Socket socket;
     private BufferedReader in;
     private BufferedWriter out;
 
-    public Client() {
+    Client() {
         socket = new Socket();
     }
 
@@ -20,7 +18,7 @@ public class Client {
         this.connect(address);
     }
 
-    public void connect(InetSocketAddress address) throws IOException {
+    void connect(InetSocketAddress address) throws IOException {
         if (socket != null) {
             socket.close();
             socket = new Socket();
@@ -31,24 +29,23 @@ public class Client {
         out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
     }
 
-    public void send(String str) throws IOException {
-        out.write(str);
+    void send(String str) throws IOException {
+        out.write(str+'\0');
         out.flush();
     }
 
-    public ArrayList<String> read() throws IOException {
-        ArrayList<String> input = new ArrayList<>();
+    String read() throws IOException {
+        StringBuilder s = new StringBuilder();
 
-        String line = in.readLine();
-        while (!line.isEmpty()) {
-            input.add(line);
-            line = in.readLine();
+        int ch = 'x';
+        while((ch = in.read()) != '\0' && ch != -1) {
+            s.append((char)ch);
         }
 
-        return input;
+        return s.toString();
     }
 
-    public void close() throws IOException {
+    void close() throws IOException {
         socket.close();
     }
 }
