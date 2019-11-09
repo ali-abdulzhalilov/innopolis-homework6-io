@@ -60,17 +60,8 @@ public class AppServer {
 //        t1.start();
 //        TimeUnit.SECONDS.sleep(3);
 //        t2.start();
-        Server server = new Server();
-        server.bind(new InetSocketAddress("localhost", 8001));
-
-        Socket client = server.accept();
-        String input = server.read(client);
-        System.out.println(input);
-
-        String output = OUTPUT_HEADERS + OUTPUT.length() + OUTPUT_END_OF_HEADERS + OUTPUT;
-        server.send(client, output);
-
-        client.close();
-        server.close();
+        InetSocketAddress address = new InetSocketAddress("localhost", 8001);
+        MyHttpServer server = new MyHttpServer(address);
+        server.run();
     }
 }

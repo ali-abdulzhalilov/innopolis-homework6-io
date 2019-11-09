@@ -9,9 +9,6 @@ import org.junit.Test;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.util.ArrayList;
-import java.util.concurrent.TimeUnit;
 
 public class AppTest {
     private Client client;
@@ -34,12 +31,10 @@ public class AppTest {
         InetSocketAddress address = new InetSocketAddress("www.google.com", 80);
         client.connect(address);
 
-        String request = "GET / HTTP/1.1\r\n";
-        request += "Accept: */*\r\n";
-        request += "\r\n";
-        client.send(request);
+        client.sendGet("");
 
         String response = client.read();
+        System.out.println(response);;
         assertTrue(response.contains("OK"));
     }
 
@@ -68,6 +63,9 @@ public class AppTest {
 
         serverThread.start();
         clientThread.start();
+
+        clientThread.join();
+        serverThread.join();
     }
 
     @Test
@@ -95,5 +93,38 @@ public class AppTest {
 
         serverThread.start();
         clientThread.start();
+
+        clientThread.join();
+        serverThread.join();
+    }
+
+    @Test
+    public void testMyHttpServer() throws IOException, InterruptedException {
+        InetSocketAddress address = new InetSocketAddress("localhost", 8001);
+        MyHttpServer httpServer = new MyHttpServer(address);
+
+        Thread serverThread = new Thread(() -> {
+            httpServer.run();
+        });
+
+        Thread clientThread = new Thread(() -> {
+            try {
+                client.connect(address);
+                client.sendGet("");
+                String response = client.read();
+                System.out.println(response);
+
+                httpServer.shutdown();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+
+        serverThread.start();
+        clientThread.start();
+
+        clientThread.join();
+        serverThread.join();
     }
 }
