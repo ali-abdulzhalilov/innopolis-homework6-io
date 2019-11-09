@@ -37,7 +37,7 @@ public class MyHttpServer extends Server{
     }
 
     private boolean isGet(String request) {
-        String firstLine = request.split(" ")[0];
+        String firstLine = request.trim().split("\n")[0];
         return firstLine.contains("GET");
     }
 

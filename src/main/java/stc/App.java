@@ -9,7 +9,7 @@ public class App
     public static void main( String[] args ) throws IOException {
         Client client = new Client();
         //client.connect(new InetSocketAddress("www.google.com", 80));
-        client.connect(new InetSocketAddress("localhost", 8001));
+        client.connect(new InetSocketAddress("localhost", 8002));
 
         client.sendGet("");
         String input = client.read();

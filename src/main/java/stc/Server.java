@@ -35,7 +35,7 @@ public class Server {
 
     void send(Socket client, String str) throws IOException {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-        out.write(str);
+        out.write(str+'\0');
         out.flush();
     }
 
@@ -44,15 +44,16 @@ public class Server {
         StringBuilder s = new StringBuilder();
 
         int ch = 'x';
-        while(in.ready() && (ch = in.read()) != '\0' && ch != -1) {
+        while((ch = in.read()) != '\0' && ch != -1) {
             s.append((char)ch);
         }
 
         return s.toString();
     }
 
-    void shutdown() {
+    void shutdown() throws IOException {
         this.isEnabled = false;
+        serverSocket.close();
     }
 
     void close() throws IOException {

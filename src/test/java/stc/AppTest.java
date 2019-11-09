@@ -103,18 +103,16 @@ public class AppTest {
         InetSocketAddress address = new InetSocketAddress("localhost", 8001);
         MyHttpServer httpServer = new MyHttpServer(address);
 
-        Thread serverThread = new Thread(() -> {
-            httpServer.run();
-        });
+        Thread serverThread = new Thread(httpServer::run);
 
         Thread clientThread = new Thread(() -> {
             try {
                 client.connect(address);
                 client.sendGet("");
                 String response = client.read();
-                System.out.println(response);
+                System.out.println("!!!:"+response);
 
-                httpServer.shutdown();
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -125,6 +123,8 @@ public class AppTest {
         clientThread.start();
 
         clientThread.join();
+        httpServer.shutdown();
+        httpServer.close();
         serverThread.join();
     }
 }
