@@ -34,7 +34,6 @@ public class AppTest {
         client.sendGet("");
 
         String response = client.read();
-        System.out.println(response);;
         assertTrue(response.contains("OK"));
     }
 
@@ -110,9 +109,6 @@ public class AppTest {
                 client.connect(address);
                 client.sendGet("");
                 String response = client.read();
-                System.out.println("!!!:"+response);
-
-
             } catch (IOException e) {
                 e.printStackTrace();
             }

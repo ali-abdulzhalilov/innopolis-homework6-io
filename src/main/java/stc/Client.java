@@ -5,10 +5,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class Client {
-    private final String CRLF = "\r\n";
-    private final String HEADER_GET = "GET / HTTP/1.1";
-    private final String HEADER_POST = "POST / HTTP/1.1";
-    private final String HEADER_BODY = "Accept: */*";
+    private final static String CRLF = "\r\n";
+    private final static String HEADER_GET = "GET / HTTP/1.1";
+    private final static String HEADER_POST = "POST / HTTP/1.1";
+    private final static String HEADER_BODY = "Accept: */*";
 
     private Socket socket;
     private BufferedReader in;
@@ -35,7 +35,6 @@ public class Client {
     }
 
     void send(String str) throws IOException {
-        System.out.println(str+'\0');
         out.write(str+'\0');
         out.flush();
     }

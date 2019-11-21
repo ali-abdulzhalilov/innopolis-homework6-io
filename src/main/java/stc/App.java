@@ -13,7 +13,6 @@ public class App
 
         client.sendGet("");
         String input = client.read();
-        System.out.println(input);
 
         client.close();
     }

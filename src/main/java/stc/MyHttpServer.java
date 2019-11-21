@@ -6,10 +6,10 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 public class MyHttpServer extends Server{
-    private final String CRLF = "\r\n";
-    private final String HEADER_200 = "HTTP/1.1 200 OK";
-    private final String HEADER_404 = "HTTP/1.1 404 Not Found";
-    private final String HEADER_BODY = "Content-Type: text/html" + CRLF +
+    private final static String CRLF = "\r\n";
+    private final static String HEADER_200 = "HTTP/1.1 200 OK";
+    private final static String HEADER_404 = "HTTP/1.1 404 Not Found";
+    private final static String HEADER_BODY = "Content-Type: text/html" + CRLF +
             "Content-Length: ";
 
     public MyHttpServer(InetSocketAddress address) throws IOException {
@@ -45,7 +45,7 @@ public class MyHttpServer extends Server{
         return HEADER_200 + CRLF +
                 HEADER_BODY + responseBody.length() + CRLF +
                 CRLF +
-                responseBody + '\0';
+                responseBody;
     }
 
     private String listFilesAsPage() {
@@ -68,6 +68,6 @@ public class MyHttpServer extends Server{
         return HEADER_404 + CRLF +
                 HEADER_BODY + responseBody.length() + CRLF +
                 CRLF +
-                responseBody + '\0';
+                responseBody;
     }
 }
